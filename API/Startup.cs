@@ -1,9 +1,4 @@
-using Application.Activities;
-using Application.Core;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Persistence;
+using API.Extensions;
 
 namespace API
 {
@@ -20,26 +15,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt =>
-                       {
-                           opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-                       });
-
             services.AddControllers();
+            services.AddApplicationServices(_config);
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
-
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000"));
-            });
-
-            services.AddMediatR(typeof(List.Handler).Assembly);
-
-            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
