@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Grid, List } from 'semantic-ui-react';
 import { Activity } from '../../../types';
 import ActivityDetails from '../Details';
+import ActivityForm from '../Form';
 import ActivityList from '../List';
 
 interface Props {
@@ -20,6 +21,7 @@ const ActivityDashboard: FC<Props> = ({ activities }) => {
         {activities.length ? (
           <ActivityDetails activity={activities[0]} />
         ) : null}
+        <ActivityForm />
       </Grid.Column>
     </Grid>
   );
