@@ -5,11 +5,13 @@ import { Activity } from '../../../types';
 interface Props {
   activity: Activity;
   toggleSelectedActivity: (id: string) => void;
+  onFormOpen: (id: string) => void;
 }
 
 const ActivityDetails: FC<Props> = ({
   activity: { category, city, date, description, id, title, venue },
   toggleSelectedActivity,
+  onFormOpen,
 }) => {
   return (
     <Card
@@ -20,7 +22,12 @@ const ActivityDetails: FC<Props> = ({
       description={description}
       extra={
         <Button.Group widths="2">
-          <Button basic color="blue" content="Edit" />
+          <Button
+            basic
+            color="blue"
+            content="Edit"
+            onClick={() => onFormOpen(id)}
+          />
           <Button
             basic
             color="grey"

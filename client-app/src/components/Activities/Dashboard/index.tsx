@@ -9,12 +9,20 @@ interface Props {
   activities: Activity[];
   selectedActivity: Activity | undefined;
   toggleSelectedActivity: (id: string) => void;
+  isEdit: boolean;
+  onFormOpen: (id: string) => void;
+  onFormClose: () => void;
+  onCreateOrEditActivity: (activity: Activity) => void;
 }
 
 const ActivityDashboard: FC<Props> = ({
   activities,
   selectedActivity,
   toggleSelectedActivity,
+  isEdit,
+  onFormClose,
+  onFormOpen,
+  onCreateOrEditActivity,
 }) => {
   return (
     <Grid>
@@ -22,18 +30,26 @@ const ActivityDashboard: FC<Props> = ({
         <List>
           <ActivityList
             activities={activities}
+            onFormClose={onFormClose}
             toggleSelectedActivity={toggleSelectedActivity}
           />
         </List>
       </Grid.Column>
       <Grid.Column width="6">
-        {selectedActivity ? (
+        {selectedActivity && !isEdit ? (
           <ActivityDetails
             activity={selectedActivity}
             toggleSelectedActivity={toggleSelectedActivity}
+            onFormOpen={onFormOpen}
           />
         ) : null}
-        <ActivityForm />
+        {isEdit && (
+          <ActivityForm
+            onCreateOrEditActivity={onCreateOrEditActivity}
+            activity={selectedActivity}
+            onFormClose={onFormClose}
+          />
+        )}
       </Grid.Column>
     </Grid>
   );
