@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
 
 const NavBar: FC = () => {
   return (

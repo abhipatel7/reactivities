@@ -4,10 +4,12 @@ import { Activity } from '../../../types';
 
 interface Props {
   activity: Activity;
+  toggleSelectedActivity: (id: string) => void;
 }
 
 const ActivityDetails: FC<Props> = ({
   activity: { category, city, date, description, id, title, venue },
+  toggleSelectedActivity,
 }) => {
   return (
     <Card
@@ -19,7 +21,12 @@ const ActivityDetails: FC<Props> = ({
       extra={
         <Button.Group widths="2">
           <Button basic color="blue" content="Edit" />
-          <Button basic color="grey" content="Cancel" />
+          <Button
+            basic
+            color="grey"
+            content="Cancel"
+            onClick={() => toggleSelectedActivity(id)}
+          />
         </Button.Group>
       }
     />

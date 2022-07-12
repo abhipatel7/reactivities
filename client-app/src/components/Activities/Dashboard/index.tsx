@@ -7,19 +7,31 @@ import ActivityList from '../List';
 
 interface Props {
   activities: Activity[];
+  selectedActivity: Activity | undefined;
+  toggleSelectedActivity: (id: string) => void;
 }
 
-const ActivityDashboard: FC<Props> = ({ activities }) => {
+const ActivityDashboard: FC<Props> = ({
+  activities,
+  selectedActivity,
+  toggleSelectedActivity,
+}) => {
   return (
     <Grid>
       <Grid.Column width="10">
         <List>
-          <ActivityList activities={activities} />
+          <ActivityList
+            activities={activities}
+            toggleSelectedActivity={toggleSelectedActivity}
+          />
         </List>
       </Grid.Column>
       <Grid.Column width="6">
-        {activities.length ? (
-          <ActivityDetails activity={activities[0]} />
+        {selectedActivity ? (
+          <ActivityDetails
+            activity={selectedActivity}
+            toggleSelectedActivity={toggleSelectedActivity}
+          />
         ) : null}
         <ActivityForm />
       </Grid.Column>

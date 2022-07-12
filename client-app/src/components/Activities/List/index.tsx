@@ -4,9 +4,10 @@ import { Activity } from '../../../types';
 
 interface Props {
   activities: Activity[];
+  toggleSelectedActivity: (id: string) => void;
 }
 
-const ActivityList: FC<Props> = ({ activities }) => {
+const ActivityList: FC<Props> = ({ activities, toggleSelectedActivity }) => {
   return (
     <Segment>
       <Item.Group divided>
@@ -23,7 +24,12 @@ const ActivityList: FC<Props> = ({ activities }) => {
                   </div>
                 </Item.Description>
                 <Item.Extra>
-                  <Button floated="right" content="View" color="blue" />
+                  <Button
+                    onClick={() => toggleSelectedActivity(id)}
+                    floated="right"
+                    content="View"
+                    color="blue"
+                  />
                   <Label basic content={category} />
                 </Item.Extra>
               </Item.Content>

@@ -8,6 +8,9 @@ import NavBar from './components/layout/NavBar';
 
 const App: FC = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [selectedActivity, setSelectedActivities] = useState<
+    Activity | undefined
+  >();
 
   useEffect(() => {
     axios
@@ -18,11 +21,23 @@ const App: FC = () => {
       .catch((e) => console.log(e));
   }, []);
 
+  const toggleSelectedActivity = (id: string) => {
+    if (selectedActivity && selectedActivity.id === id) {
+      setSelectedActivities(undefined);
+    } else {
+      setSelectedActivities(activities.find((activity) => activity.id === id));
+    }
+  };
+
   return (
     <>
       <NavBar />
       <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard activities={activities} />
+        <ActivityDashboard
+          activities={activities}
+          selectedActivity={selectedActivity}
+          toggleSelectedActivity={toggleSelectedActivity}
+        />
       </Container>
     </>
   );
