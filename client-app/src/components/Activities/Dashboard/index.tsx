@@ -13,6 +13,7 @@ interface Props {
   onFormOpen: (id: string) => void;
   onFormClose: () => void;
   onCreateOrEditActivity: (activity: Activity) => void;
+  onDeleteActivity: (id: string) => void;
 }
 
 const ActivityDashboard: FC<Props> = ({
@@ -23,6 +24,7 @@ const ActivityDashboard: FC<Props> = ({
   onFormClose,
   onFormOpen,
   onCreateOrEditActivity,
+  onDeleteActivity,
 }) => {
   return (
     <Grid>
@@ -31,6 +33,7 @@ const ActivityDashboard: FC<Props> = ({
           <ActivityList
             activities={activities}
             onFormClose={onFormClose}
+            onDeleteActivity={onDeleteActivity}
             toggleSelectedActivity={toggleSelectedActivity}
           />
         </List>

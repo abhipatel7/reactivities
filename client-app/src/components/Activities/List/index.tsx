@@ -6,12 +6,14 @@ interface Props {
   activities: Activity[];
   toggleSelectedActivity: (id: string) => void;
   onFormClose: () => void;
+  onDeleteActivity: (id: string) => void;
 }
 
 const ActivityList: FC<Props> = ({
   activities,
   toggleSelectedActivity,
   onFormClose,
+  onDeleteActivity,
 }) => {
   return (
     <Segment>
@@ -37,6 +39,14 @@ const ActivityList: FC<Props> = ({
                     floated="right"
                     content="View"
                     color="blue"
+                  />
+                  <Button
+                    onClick={() => {
+                      onDeleteActivity(id);
+                    }}
+                    floated="right"
+                    content="Delete"
+                    color="red"
                   />
                   <Label basic content={category} />
                 </Item.Extra>

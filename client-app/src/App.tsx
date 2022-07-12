@@ -52,6 +52,9 @@ const App: FC = () => {
     setSelectedActivities(activity);
   };
 
+  const onDeleteActivity = (id: string) =>
+    setActivities(activities.filter((activity) => activity.id !== id));
+
   return (
     <>
       <NavBar onFormOpen={onFormOpen} />
@@ -64,6 +67,7 @@ const App: FC = () => {
           onFormOpen={onFormOpen}
           onFormClose={onFormClose}
           onCreateOrEditActivity={onCreateOrEditActivity}
+          onDeleteActivity={onDeleteActivity}
         />
       </Container>
     </>
