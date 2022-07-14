@@ -4,15 +4,13 @@ import { Activity } from '../../../types';
 
 interface Props {
   activities: Activity[];
-  toggleSelectedActivity: (id: string) => void;
-  onFormClose: () => void;
+  onSelectActivity: (id: string) => void;
   onDeleteActivity: (id: string) => void;
 }
 
 const ActivityList: FC<Props> = ({
   activities,
-  toggleSelectedActivity,
-  onFormClose,
+  onSelectActivity,
   onDeleteActivity,
 }) => {
   return (
@@ -32,18 +30,13 @@ const ActivityList: FC<Props> = ({
                 </Item.Description>
                 <Item.Extra>
                   <Button
-                    onClick={() => {
-                      onFormClose();
-                      toggleSelectedActivity(id);
-                    }}
+                    onClick={() => onSelectActivity(id)}
                     floated="right"
                     content="View"
                     color="blue"
                   />
                   <Button
-                    onClick={() => {
-                      onDeleteActivity(id);
-                    }}
+                    onClick={() => onDeleteActivity(id)}
                     floated="right"
                     content="Delete"
                     color="red"

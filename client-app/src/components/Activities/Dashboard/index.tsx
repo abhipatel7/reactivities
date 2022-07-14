@@ -8,23 +8,27 @@ import ActivityList from '../List';
 interface Props {
   activities: Activity[];
   selectedActivity: Activity | undefined;
-  toggleSelectedActivity: (id: string) => void;
+  onSelectActivity: (id: string) => void;
+  onCancelSelectedActivity: () => void;
   isEdit: boolean;
   onFormOpen: (id: string) => void;
   onFormClose: () => void;
   onCreateOrEditActivity: (activity: Activity) => void;
   onDeleteActivity: (id: string) => void;
+  isSubmitting: boolean;
 }
 
 const ActivityDashboard: FC<Props> = ({
   activities,
   selectedActivity,
-  toggleSelectedActivity,
+  onSelectActivity,
+  onCancelSelectedActivity,
   isEdit,
   onFormClose,
   onFormOpen,
   onCreateOrEditActivity,
   onDeleteActivity,
+  isSubmitting,
 }) => {
   return (
     <Grid>
@@ -32,9 +36,8 @@ const ActivityDashboard: FC<Props> = ({
         <List>
           <ActivityList
             activities={activities}
-            onFormClose={onFormClose}
             onDeleteActivity={onDeleteActivity}
-            toggleSelectedActivity={toggleSelectedActivity}
+            onSelectActivity={onSelectActivity}
           />
         </List>
       </Grid.Column>
@@ -42,7 +45,7 @@ const ActivityDashboard: FC<Props> = ({
         {selectedActivity && !isEdit ? (
           <ActivityDetails
             activity={selectedActivity}
-            toggleSelectedActivity={toggleSelectedActivity}
+            onCancelSelectedActivity={onCancelSelectedActivity}
             onFormOpen={onFormOpen}
           />
         ) : null}
@@ -51,6 +54,7 @@ const ActivityDashboard: FC<Props> = ({
             onCreateOrEditActivity={onCreateOrEditActivity}
             activity={selectedActivity}
             onFormClose={onFormClose}
+            isSubmitting={isSubmitting}
           />
         )}
       </Grid.Column>

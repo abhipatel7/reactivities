@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import './App.css';
-import axios from 'axios';
 import ActivityDashboard from './components/Activities/Dashboard';
 import { Activity } from './types';
 import { Container } from 'semantic-ui-react';
 import NavBar from './components/layout/NavBar';
 import { v4 } from 'uuid';
+import services from './services';
+import Loader from './components/Loader';
 
 const App: FC = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -13,47 +14,64 @@ const App: FC = () => {
     Activity | undefined
   >();
   const [isEdit, setIsEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    axios
-      .get<Activity[]>('http://localhost:5000/api/activities')
+    services.Activities.list()
       .then((res) => {
-        setActivities(res.data);
+        let activities: Activity[] = [];
+        res.forEach((activity) => {
+          activity.date = activity.date.split('T')[0];
+          activities.push(activity);
+        });
+        setActivities(activities);
+        setIsLoading(false);
       })
       .catch((e) => console.log(e));
   }, []);
 
-  const toggleSelectedActivity = (id?: string) => {
-    if (!isEdit) {
-      if (!id || (selectedActivity && selectedActivity.id === id)) {
-        setSelectedActivities(undefined);
-      } else {
-        setSelectedActivities(
-          activities.find((activity) => activity.id === id)
-        );
-      }
-    }
-  };
+  const onSelectActivity = (id: string) =>
+    setSelectedActivities(activities.find((activity) => activity.id === id));
+
+  const onCancelSelectedActivity = () => setSelectedActivities(undefined);
 
   const onFormOpen = (id?: string) => {
-    isEdit && toggleSelectedActivity(id);
+    id ? onSelectActivity(id) : onCancelSelectedActivity();
     setIsEdit(true);
   };
 
   const onFormClose = () => setIsEdit(false);
 
   const onCreateOrEditActivity = (activity: Activity) => {
-    activity.id
-      ? setActivities([
+    setIsSubmitting(true);
+    if (activity.id) {
+      services.Activities.update(activity).then(() => {
+        setActivities([
           ...activities.filter((a) => a.id !== activity.id),
           activity,
-        ])
-      : setActivities([...activities, { ...activity, id: v4() }]);
-    setSelectedActivities(activity);
+        ]);
+        setSelectedActivities(activity);
+        setIsEdit(false);
+        setIsSubmitting(false);
+      });
+    } else {
+      activity.id = v4();
+      services.Activities.create(activity).then(() => {
+        setActivities([...activities, activity]);
+      });
+      setSelectedActivities(activity);
+      setIsEdit(false);
+      setIsSubmitting(false);
+    }
   };
 
   const onDeleteActivity = (id: string) =>
     setActivities(activities.filter((activity) => activity.id !== id));
+
+  if (isLoading) {
+    return <Loader content="Loading App..." />;
+  }
 
   return (
     <>
@@ -62,12 +80,14 @@ const App: FC = () => {
         <ActivityDashboard
           activities={activities}
           selectedActivity={selectedActivity}
-          toggleSelectedActivity={toggleSelectedActivity}
+          onSelectActivity={onSelectActivity}
+          onCancelSelectedActivity={onCancelSelectedActivity}
           isEdit={isEdit}
           onFormOpen={onFormOpen}
           onFormClose={onFormClose}
           onCreateOrEditActivity={onCreateOrEditActivity}
           onDeleteActivity={onDeleteActivity}
+          isSubmitting={isSubmitting}
         />
       </Container>
     </>

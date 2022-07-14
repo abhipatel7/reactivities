@@ -4,13 +4,13 @@ import { Activity } from '../../../types';
 
 interface Props {
   activity: Activity;
-  toggleSelectedActivity: (id: string) => void;
+  onCancelSelectedActivity: () => void;
   onFormOpen: (id: string) => void;
 }
 
 const ActivityDetails: FC<Props> = ({
   activity: { category, city, date, description, id, title, venue },
-  toggleSelectedActivity,
+  onCancelSelectedActivity,
   onFormOpen,
 }) => {
   return (
@@ -32,7 +32,7 @@ const ActivityDetails: FC<Props> = ({
             basic
             color="grey"
             content="Cancel"
-            onClick={() => toggleSelectedActivity(id)}
+            onClick={onCancelSelectedActivity}
           />
         </Button.Group>
       }
