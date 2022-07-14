@@ -38,6 +38,7 @@ const ActivityDashboard: FC<Props> = ({
             activities={activities}
             onDeleteActivity={onDeleteActivity}
             onSelectActivity={onSelectActivity}
+            isSubmitting={isSubmitting}
           />
         </List>
       </Grid.Column>

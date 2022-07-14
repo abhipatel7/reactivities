@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, SyntheticEvent, useState } from 'react';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { Activity } from '../../../types';
 
@@ -6,13 +6,25 @@ interface Props {
   activities: Activity[];
   onSelectActivity: (id: string) => void;
   onDeleteActivity: (id: string) => void;
+  isSubmitting: boolean;
 }
 
 const ActivityList: FC<Props> = ({
   activities,
   onSelectActivity,
   onDeleteActivity,
+  isSubmitting,
 }) => {
+  const [target, setTarget] = useState('');
+
+  const onActivityDelete = (
+    e: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    setTarget(e.currentTarget.name);
+    onDeleteActivity(id);
+  };
+
   return (
     <Segment>
       <Item.Group divided>
@@ -36,7 +48,9 @@ const ActivityList: FC<Props> = ({
                     color="blue"
                   />
                   <Button
-                    onClick={() => onDeleteActivity(id)}
+                    onClick={(e) => onActivityDelete(e, id)}
+                    loading={isSubmitting && target === id}
+                    name={id}
                     floated="right"
                     content="Delete"
                     color="red"

@@ -66,8 +66,13 @@ const App: FC = () => {
     }
   };
 
-  const onDeleteActivity = (id: string) =>
-    setActivities(activities.filter((activity) => activity.id !== id));
+  const onDeleteActivity = (id: string) => {
+    setIsSubmitting(true);
+    services.Activities.delete(id).then(() => {
+      setActivities(activities.filter((activity) => activity.id !== id));
+      setIsSubmitting(false);
+    });
+  };
 
   if (isLoading) {
     return <Loader content="Loading App..." />;
