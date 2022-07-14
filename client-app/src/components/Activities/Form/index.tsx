@@ -1,22 +1,21 @@
+import { observer } from 'mobx-react-lite';
 import { ChangeEvent, FC } from 'react';
 import { useState } from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../types';
+import { useStore } from 'stores';
+import { Activity } from 'types';
 
-interface Props {
-  activity: Activity | undefined;
-  onFormClose: () => void;
-  onCreateOrEditActivity: (activity: Activity) => void;
-  isSubmitting: boolean;
-}
+const ActivityForm: FC = () => {
+  const { activityStore } = useStore();
+  const {
+    selectedActivity,
+    onFormClose,
+    onCreateActivity,
+    onUpdateActivity,
+    isLoading,
+  } = activityStore;
 
-const ActivityForm: FC<Props> = ({
-  activity: initialActivity,
-  onFormClose,
-  onCreateOrEditActivity,
-  isSubmitting,
-}) => {
-  const initialState = initialActivity ?? {
+  const initialState = selectedActivity ?? {
     category: '',
     city: '',
     date: '',
@@ -28,7 +27,8 @@ const ActivityForm: FC<Props> = ({
 
   const [activity, setActivity] = useState<Activity>(initialState);
 
-  const onSubmit = () => onCreateOrEditActivity(activity);
+  const onSubmit = () =>
+    activity.id ? onUpdateActivity(activity) : onCreateActivity(activity);
 
   const onChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -79,7 +79,7 @@ const ActivityForm: FC<Props> = ({
         />
         <Button
           floated="right"
-          loading={isSubmitting}
+          loading={isLoading}
           positive
           type="submit"
           content="Submit"
@@ -95,4 +95,4 @@ const ActivityForm: FC<Props> = ({
   );
 };
 
-export default ActivityForm;
+export default observer(ActivityForm);

@@ -1,20 +1,13 @@
+import { observer } from 'mobx-react-lite';
 import { FC, SyntheticEvent, useState } from 'react';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../types';
+import { useStore } from 'stores';
 
-interface Props {
-  activities: Activity[];
-  onSelectActivity: (id: string) => void;
-  onDeleteActivity: (id: string) => void;
-  isSubmitting: boolean;
-}
+const ActivityList: FC = () => {
+  const { activityStore } = useStore();
+  const { onDeleteActivity, activitiesByDate, isLoading, onSelectActivity } =
+    activityStore;
 
-const ActivityList: FC<Props> = ({
-  activities,
-  onSelectActivity,
-  onDeleteActivity,
-  isSubmitting,
-}) => {
   const [target, setTarget] = useState('');
 
   const onActivityDelete = (
@@ -28,7 +21,7 @@ const ActivityList: FC<Props> = ({
   return (
     <Segment>
       <Item.Group divided>
-        {activities.map(
+        {activitiesByDate.map(
           ({ id, category, city, date, description, title, venue }) => (
             <Item key={id}>
               <Item.Content>
@@ -49,7 +42,7 @@ const ActivityList: FC<Props> = ({
                   />
                   <Button
                     onClick={(e) => onActivityDelete(e, id)}
-                    loading={isSubmitting && target === id}
+                    loading={isLoading && target === id}
                     name={id}
                     floated="right"
                     content="Delete"
@@ -66,4 +59,4 @@ const ActivityList: FC<Props> = ({
   );
 };
 
-export default ActivityList;
+export default observer(ActivityList);

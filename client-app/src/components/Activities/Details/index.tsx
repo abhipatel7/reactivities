@@ -1,18 +1,18 @@
+import { observer } from 'mobx-react-lite';
 import { FC } from 'react';
 import { Button, Card } from 'semantic-ui-react';
-import { Activity } from '../../../types';
+import { useStore } from 'stores';
+import { Loader } from 'components';
 
-interface Props {
-  activity: Activity;
-  onCancelSelectedActivity: () => void;
-  onFormOpen: (id: string) => void;
-}
+const ActivityDetails: FC = () => {
+  const { activityStore } = useStore();
+  const { selectedActivity, onFormOpen, onCancelSelectedActivity } =
+    activityStore;
 
-const ActivityDetails: FC<Props> = ({
-  activity: { category, city, date, description, id, title, venue },
-  onCancelSelectedActivity,
-  onFormOpen,
-}) => {
+  if (!selectedActivity) return <Loader />;
+
+  const { title, id, category, date, description } = selectedActivity;
+
   return (
     <Card
       fluid
@@ -40,4 +40,4 @@ const ActivityDetails: FC<Props> = ({
   );
 };
 
-export default ActivityDetails;
+export default observer(ActivityDetails);
