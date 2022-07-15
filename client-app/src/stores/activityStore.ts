@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { v4 } from 'uuid';
 import services from 'services';
 import { Activity } from 'types';
 
@@ -20,13 +19,11 @@ export default class ActivityStore {
     );
   }
 
-  onLoadActivities = async () => {
+  loadActivities = async () => {
+    this.setLoadingInitial(true);
     try {
       const activities = await services.Activities.list();
-      activities.forEach((activity) => {
-        activity.date = activity.date.split('T')[0];
-        this.activityRegistry.set(activity.id, activity);
-      });
+      activities.forEach((activity) => this.setActivity(activity));
       this.setLoadingInitial(false);
     } catch (error) {
       console.log(error);
@@ -34,30 +31,41 @@ export default class ActivityStore {
     }
   };
 
+  loadActivityById = async (id: string) => {
+    let activity = this.getActivity(id);
+    if (activity) {
+      this.selectedActivity = activity;
+      return activity;
+    } else {
+      this.loadingInitial = true;
+      try {
+        activity = await services.Activities.details(id);
+        this.setActivity(activity);
+        runInAction(() => {
+          this.selectedActivity = activity;
+        });
+        this.setLoadingInitial(false);
+        return activity;
+      } catch (e) {
+        console.log(e);
+        this.setLoadingInitial(false);
+      }
+    }
+  };
+
+  private setActivity = (activity: Activity) => {
+    activity.date = activity.date.split('T')[0];
+    this.activityRegistry.set(activity.id, activity);
+  };
+
+  private getActivity = (id: string) => this.activityRegistry.get(id);
+
   setLoadingInitial = (state: boolean) => {
     this.loadingInitial = state;
   };
 
-  onSelectActivity = (id: string) => {
-    this.selectedActivity = this.activityRegistry.get(id);
-  };
-
-  onCancelSelectedActivity = () => {
-    this.selectedActivity = undefined;
-  };
-
-  onFormOpen = (id?: string) => {
-    id ? this.onSelectActivity(id) : this.onCancelSelectedActivity();
-    this.isEdit = true;
-  };
-
-  onFormClose = () => {
-    this.isEdit = false;
-  };
-
-  onCreateActivity = async (activity: Activity) => {
+  createActivity = async (activity: Activity) => {
     this.isLoading = true;
-    activity.id = v4();
     try {
       await services.Activities.create(activity);
       runInAction(() => {
@@ -74,7 +82,7 @@ export default class ActivityStore {
     }
   };
 
-  onUpdateActivity = async (activity: Activity) => {
+  updateActivity = async (activity: Activity) => {
     this.isLoading = true;
     try {
       await services.Activities.update(activity);
@@ -92,13 +100,12 @@ export default class ActivityStore {
     }
   };
 
-  onDeleteActivity = async (id: string) => {
+  deleteActivity = async (id: string) => {
     this.isLoading = true;
     try {
       await services.Activities.delete(id);
       runInAction(() => {
         this.activityRegistry.delete(id);
-        if (this.selectedActivity?.id === id) this.onCancelSelectedActivity();
         this.isLoading = false;
       });
     } catch (error) {

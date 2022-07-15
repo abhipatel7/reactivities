@@ -1,17 +1,23 @@
 import { observer } from 'mobx-react-lite';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Button, Card } from 'semantic-ui-react';
 import { useStore } from 'stores';
 import { Loader } from 'components';
+import { Link, useParams } from 'react-router-dom';
 
 const ActivityDetails: FC = () => {
   const { activityStore } = useStore();
-  const { selectedActivity, onFormOpen, onCancelSelectedActivity } =
-    activityStore;
+  const { selectedActivity, loadActivityById, loadingInitial } = activityStore;
 
-  if (!selectedActivity) return <Loader />;
+  const { id } = useParams<{ id: string }>();
 
-  const { title, id, category, date, description } = selectedActivity;
+  useEffect(() => {
+    if (id) loadActivityById(id);
+  }, [id, loadActivityById]);
+
+  if (loadingInitial || !selectedActivity) return <Loader />;
+
+  const { title, category, date, description } = selectedActivity;
 
   return (
     <Card
@@ -23,16 +29,18 @@ const ActivityDetails: FC = () => {
       extra={
         <Button.Group widths="2">
           <Button
+            as={Link}
+            to={`/manage/${id}`}
             basic
             color="blue"
             content="Edit"
-            onClick={() => onFormOpen(id)}
           />
           <Button
+            as={Link}
+            to="/activities"
             basic
             color="grey"
             content="Cancel"
-            onClick={onCancelSelectedActivity}
           />
         </Button.Group>
       }

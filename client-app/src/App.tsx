@@ -1,26 +1,31 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import './App.css';
 import { Container } from 'semantic-ui-react';
-import { useStore } from 'stores';
 import { observer } from 'mobx-react-lite';
-import { NavBar, ActivityDashboard, Loader } from 'components';
+import {
+  NavBar,
+  ActivityDashboard,
+  ActivityForm,
+  ActivityDetails,
+} from 'components';
+import Home from 'pages/home';
+import { Route, useLocation } from 'react-router-dom';
 
 const App: FC = () => {
-  const { activityStore } = useStore();
-
-  useEffect(() => {
-    activityStore.onLoadActivities();
-  }, [activityStore]);
-
-  if (activityStore.loadingInitial) {
-    return <Loader content="Loading App..." />;
-  }
+  const { key } = useLocation();
 
   return (
     <>
       <NavBar />
       <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/activities" component={ActivityDashboard} />
+        <Route path="/activities/:id" component={ActivityDetails} />
+        <Route
+          path={['/create-activity', '/manage/:id']}
+          key={key}
+          component={ActivityForm}
+        />
       </Container>
     </>
   );

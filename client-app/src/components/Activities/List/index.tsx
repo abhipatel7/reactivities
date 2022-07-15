@@ -1,12 +1,16 @@
 import { observer } from 'mobx-react-lite';
 import { FC, SyntheticEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { useStore } from 'stores';
 
 const ActivityList: FC = () => {
   const { activityStore } = useStore();
-  const { onDeleteActivity, activitiesByDate, isLoading, onSelectActivity } =
-    activityStore;
+  const {
+    deleteActivity: onDeleteActivity,
+    activitiesByDate,
+    isLoading,
+  } = activityStore;
 
   const [target, setTarget] = useState('');
 
@@ -35,7 +39,8 @@ const ActivityList: FC = () => {
                 </Item.Description>
                 <Item.Extra>
                   <Button
-                    onClick={() => onSelectActivity(id)}
+                    as={Link}
+                    to={`/activities/${id}`}
                     floated="right"
                     content="View"
                     color="blue"

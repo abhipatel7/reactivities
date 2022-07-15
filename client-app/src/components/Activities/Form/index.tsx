@@ -1,21 +1,27 @@
 import { observer } from 'mobx-react-lite';
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, useEffect } from 'react';
 import { useState } from 'react';
-import { Button, Form, Segment } from 'semantic-ui-react';
+import { useHistory, useParams } from 'react-router-dom';
+import { Button, Form, Loader, Segment } from 'semantic-ui-react';
 import { useStore } from 'stores';
 import { Activity } from 'types';
+import { v4 } from 'uuid';
 
 const ActivityForm: FC = () => {
   const { activityStore } = useStore();
   const {
-    selectedActivity,
-    onFormClose,
-    onCreateActivity,
-    onUpdateActivity,
+    createActivity,
+    updateActivity,
     isLoading,
+    loadActivityById,
+    loadingInitial,
   } = activityStore;
 
-  const initialState = selectedActivity ?? {
+  const { id } = useParams<{ id: string }>();
+
+  const history = useHistory();
+
+  const [activity, setActivity] = useState<Activity>({
     category: '',
     city: '',
     date: '',
@@ -23,19 +29,35 @@ const ActivityForm: FC = () => {
     id: '',
     title: '',
     venue: '',
+  });
+
+  useEffect(() => {
+    if (id)
+      loadActivityById(id).then((activity) => {
+        setActivity(activity!);
+      });
+  }, [id, loadActivityById]);
+
+  const onSubmit = () => {
+    if (activity.id.length === 0) {
+      let newActivity = { ...activity, id: v4() };
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/${newActivity.id}`)
+      );
+    } else {
+      updateActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
+    }
   };
-
-  const [activity, setActivity] = useState<Activity>(initialState);
-
-  const onSubmit = () =>
-    activity.id ? onUpdateActivity(activity) : onCreateActivity(activity);
-
   const onChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
     setActivity({ ...activity, [name]: value });
   };
+
+  if (loadingInitial) return <Loader content="Loading Activity..." />;
 
   return (
     <Segment clearing>
@@ -84,12 +106,7 @@ const ActivityForm: FC = () => {
           type="submit"
           content="Submit"
         />
-        <Button
-          floated="right"
-          type="button"
-          content="Cancel"
-          onClick={() => onFormClose()}
-        />
+        <Button floated="right" type="button" content="Cancel" />
       </Form>
     </Segment>
   );
