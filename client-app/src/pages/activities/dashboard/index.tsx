@@ -7,11 +7,11 @@ import { ActivityList, Loader } from 'components';
 const ActivityDashboard: FC = () => {
   const { activityStore } = useStore();
 
-  const { loadActivities, loadingInitial } = activityStore;
+  const { loadActivities, loadingInitial, activityRegistry } = activityStore;
 
   useEffect(() => {
-    loadActivities();
-  }, [loadActivities]);
+    if (activityRegistry.size === 0) loadActivities();
+  }, [activityRegistry, loadActivities]);
 
   if (loadingInitial) {
     return <Loader content="Loading App..." />;

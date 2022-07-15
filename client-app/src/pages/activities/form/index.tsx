@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { ChangeEvent, FC, useEffect } from 'react';
 import { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { Button, Form, Loader, Segment } from 'semantic-ui-react';
 import { useStore } from 'stores';
 import { Activity } from 'types';
@@ -106,7 +106,13 @@ const ActivityForm: FC = () => {
           type="submit"
           content="Submit"
         />
-        <Button floated="right" type="button" content="Cancel" />
+        <Button
+          as={Link}
+          to="/activities"
+          floated="right"
+          type="button"
+          content="Cancel"
+        />
       </Form>
     </Segment>
   );
