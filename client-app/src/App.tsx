@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import './App.css';
 import { Container } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { NavBar } from 'components';
