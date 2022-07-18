@@ -1,7 +1,7 @@
-import { observer } from 'mobx-react-lite';
-import { FC } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Menu, Container, Button } from 'semantic-ui-react';
+import { observer } from "mobx-react-lite";
+import { FC } from "react";
+import { NavLink } from "react-router-dom";
+import { Menu, Container, Button } from "semantic-ui-react";
 
 const NavBar: FC = () => {
   return (
@@ -11,11 +11,12 @@ const NavBar: FC = () => {
           <img
             src="/assets/logo.png"
             alt="logo"
-            style={{ marginRight: '10px' }}
+            style={{ marginRight: "10px" }}
           />
           Reactivities
         </Menu.Item>
         <Menu.Item as={NavLink} to="/activities" name="Activities" />
+        <Menu.Item as={NavLink} to="/errors" name="Errors" />
         <Menu.Item>
           <Button
             as={NavLink}
