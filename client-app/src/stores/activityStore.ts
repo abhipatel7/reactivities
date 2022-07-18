@@ -1,8 +1,8 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import services from 'services';
-import { Activity } from 'types';
+import { makeAutoObservable, runInAction } from "mobx";
+import services from "services";
+import { Activity } from "types";
 
-export default class ActivityStore {
+class ActivityStore {
   activityRegistry = new Map<string, Activity>();
   selectedActivity: Activity | undefined = undefined;
   isEdit = false;
@@ -66,7 +66,7 @@ export default class ActivityStore {
   };
 
   private setActivity = (activity: Activity) => {
-    activity.date = activity.date.split('T')[0];
+    activity.date = activity.date.split("T")[0];
     this.activityRegistry.set(activity.id, activity);
   };
 
@@ -128,3 +128,5 @@ export default class ActivityStore {
     }
   };
 }
+
+export default ActivityStore;

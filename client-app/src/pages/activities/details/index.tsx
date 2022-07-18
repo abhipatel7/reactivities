@@ -1,19 +1,20 @@
-import { observer } from 'mobx-react-lite';
-import { FC, useEffect } from 'react';
-import { Grid } from 'semantic-ui-react';
-import { useStore } from 'stores';
+import { observer } from "mobx-react-lite";
+import { FC, useEffect } from "react";
+import { Grid } from "semantic-ui-react";
+import { useStore } from "stores";
 import {
   ActivityDetailsChat,
   ActivityDetailsHeader,
   ActivityDetailsInfo,
   ActivityDetailsSideBar,
   Loader,
-} from 'components';
-import { useParams } from 'react-router-dom';
+} from "components";
+import { useParams } from "react-router-dom";
 
 const ActivityDetails: FC = () => {
-  const { activityStore } = useStore();
-  const { selectedActivity, loadActivityById, loadingInitial } = activityStore;
+  const {
+    activityStore: { selectedActivity, loadActivityById, loadingInitial },
+  } = useStore();
 
   const { id } = useParams<{ id: string }>();
 

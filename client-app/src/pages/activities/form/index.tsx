@@ -1,34 +1,35 @@
-import { observer } from 'mobx-react-lite';
-import { ChangeEvent, FC, useEffect } from 'react';
-import { useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { Button, Form, Loader, Segment } from 'semantic-ui-react';
-import { useStore } from 'stores';
-import { Activity } from 'types';
-import { v4 } from 'uuid';
+import { observer } from "mobx-react-lite";
+import { ChangeEvent, FC, useEffect } from "react";
+import { useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { Button, Form, Loader, Segment } from "semantic-ui-react";
+import { useStore } from "stores";
+import { Activity } from "types";
+import { v4 } from "uuid";
 
 const ActivityForm: FC = () => {
-  const { activityStore } = useStore();
   const {
-    createActivity,
-    updateActivity,
-    isLoading,
-    loadActivityById,
-    loadingInitial,
-  } = activityStore;
+    activityStore: {
+      createActivity,
+      updateActivity,
+      isLoading,
+      loadActivityById,
+      loadingInitial,
+    },
+  } = useStore();
 
   const { id } = useParams<{ id: string }>();
 
   const history = useHistory();
 
   const [activity, setActivity] = useState<Activity>({
-    category: '',
-    city: '',
-    date: '',
-    description: '',
-    id: '',
-    title: '',
-    venue: '',
+    category: "",
+    city: "",
+    date: "",
+    description: "",
+    id: "",
+    title: "",
+    venue: "",
   });
 
   useEffect(() => {
