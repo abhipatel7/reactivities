@@ -1,4 +1,4 @@
-export { default as ActivityDetailsChat } from './chat';
-export { default as ActivityDetailsHeader } from './header';
-export { default as ActivityDetailsInfo } from './info';
-export { default as ActivityDetailsSideBar } from './sideBar';
+export { default as ActivityDetailsChat } from "./Chat";
+export { default as ActivityDetailsHeader } from "./Header";
+export { default as ActivityDetailsInfo } from "./Info";
+export { default as ActivityDetailsSideBar } from "./SideBar";

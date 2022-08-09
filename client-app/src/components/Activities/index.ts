@@ -1,3 +1,3 @@
-export { default as ActivityList } from './list';
-export * from './details';
-export { default as ActivityFilters } from './filters';
+export { default as ActivityList } from "./List";
+export * from "./Details";
+export { default as ActivityFilters } from "./Filters";

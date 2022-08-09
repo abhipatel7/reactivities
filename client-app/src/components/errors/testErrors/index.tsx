@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Button, Header, Segment } from "semantic-ui-react";
 import axios from "axios";
-import ValidationErrors from "../validationErrors";
+import ValidationErrors from "../ValidationErrors";
 
 const TestErrors: FC = () => {
   const baseUrl = "http://localhost:5000/api/";

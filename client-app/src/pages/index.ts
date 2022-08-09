@@ -1,2 +1,2 @@
-export * from './activities';
-export { default as Home } from './home';
+export * from "./Activities";
+export { default as Home } from "./Home";

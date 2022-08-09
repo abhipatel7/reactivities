@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { FC, Fragment } from "react";
 import { Header } from "semantic-ui-react";
 import { useStore } from "stores";
-import ActivityListItem from "./item";
+import ActivityListItem from "./Item";
 
 const ActivityList: FC = () => {
   const {
