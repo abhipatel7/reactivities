@@ -1,7 +1,13 @@
 import { FC } from "react";
 import { Container } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import { NavBar, NotFound, ServerError, TestErrors } from "components";
+import {
+  LoginForm,
+  NavBar,
+  NotFound,
+  ServerError,
+  TestErrors,
+} from "components";
 import { Home, ActivityDashboard, ActivityDetails, ActivityForm } from "pages";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -29,6 +35,7 @@ const App: FC = () => {
                 />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
+                <Route path="/login" component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

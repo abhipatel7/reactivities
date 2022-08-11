@@ -6,15 +6,16 @@ interface Props {
   placeholder: string;
   name: string;
   label?: string;
+  type?: string;
 }
 
-const TextInput: FC<Props> = ({ placeholder, name, label }) => {
+const TextInput: FC<Props> = ({ placeholder, name, label, type }) => {
   const [field, meta] = useField(name);
 
   return (
     <Form.Field error={meta.touched && !!meta.error}>
       <label>{label}</label>
-      <input {...field} placeholder={placeholder} name={name} />
+      <input {...field} placeholder={placeholder} name={name} type={type} />
       {meta.touched && meta.error ? (
         <Label basic color="red">
           {meta.error}
