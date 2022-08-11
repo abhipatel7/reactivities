@@ -1,6 +1,8 @@
-import { makeAutoObservable } from "mobx";
+import { history } from "common";
+import { makeAutoObservable, runInAction } from "mobx";
 import services from "services";
 import { User, UserFormValues } from "types";
+import { store } from "./store";
 
 class UserStore {
   user: User | null = null;
@@ -16,7 +18,25 @@ class UserStore {
   login = async (creds: UserFormValues) => {
     try {
       const user = await services.Account.login(creds);
-      console.log(user);
+      store.commonStore.setToken(user.token);
+      runInAction(() => (this.user = user));
+      history.push("/activities");
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  logout = () => {
+    store.commonStore.setToken(null);
+    window.localStorage.removeItem("jwt");
+    this.user = null;
+    history.push("/");
+  };
+
+  getUser = async () => {
+    try {
+      const user = await services.Account.current();
+      runInAction(() => (this.user = user));
     } catch (error) {
       throw error;
     }

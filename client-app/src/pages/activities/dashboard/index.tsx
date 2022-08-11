@@ -14,7 +14,7 @@ const ActivityDashboard: FC = () => {
   }, [activityRegistry, loadActivities]);
 
   if (loadingInitial) {
-    return <Loader content="Loading App..." />;
+    return <Loader content="Loading Activities..." />;
   }
 
   return (
