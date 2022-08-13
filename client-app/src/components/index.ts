@@ -4,3 +4,4 @@ export * from "./Layout";
 export * from "./Errors";
 export * from "./Form";
 export * from "./Users";
+export * from "./Modal";

@@ -13,6 +13,7 @@ import { Home, ActivityDashboard, ActivityDetails, ActivityForm } from "pages";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useStore } from "stores";
+import ModalContainer from "components/Modal";
 
 const App: FC = () => {
   const { key } = useLocation();
@@ -31,6 +32,7 @@ const App: FC = () => {
   return (
     <>
       <ToastContainer position="bottom-right" hideProgressBar />
+      <ModalContainer />
       <Route exact path="/" component={Home} />
       <Route
         path={"/(.+)"}
