@@ -32,7 +32,7 @@ const ActivityDetails: FC = () => {
         <ActivityDetailsChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailsSideBar />
+        <ActivityDetailsSideBar activity={selectedActivity} />
       </Grid.Column>
     </Grid>
   );

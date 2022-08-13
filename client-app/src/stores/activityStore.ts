@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import services from "services";
-import { Activity } from "types";
+import { Activity, Profile } from "types";
 import { format } from "date-fns";
+import { store } from "./store";
 
 class ActivityStore {
   activityRegistry = new Map<string, Activity>();
@@ -67,6 +68,16 @@ class ActivityStore {
   };
 
   private setActivity = (activity: Activity) => {
+    const user = store.userStore.user;
+    if (user) {
+      activity.isGoing = activity.attendees!.some(
+        (attendee) => attendee.username === user.username
+      );
+      activity.isHost = activity.hostUsername === user.username;
+      activity.host = activity.attendees?.find(
+        (attendee) => attendee.username === activity.hostUsername
+      );
+    }
     activity.date = new Date(activity.date!);
     this.activityRegistry.set(activity.id, activity);
   };
@@ -126,6 +137,36 @@ class ActivityStore {
       runInAction(() => {
         this.isLoading = false;
       });
+    }
+  };
+
+  updateAttendance = async () => {
+    const user = store.userStore.user;
+    this.isLoading = true;
+
+    try {
+      await services.Activities.attend(this.selectedActivity!.id);
+      runInAction(() => {
+        if (this.selectedActivity?.isGoing) {
+          this.selectedActivity.attendees =
+            this.selectedActivity.attendees?.filter(
+              (attendee) => attendee.username !== user?.username
+            );
+          this.selectedActivity.isGoing = false;
+        } else {
+          const attendee = new Profile(user!);
+          this.selectedActivity?.attendees?.push(attendee);
+          this.selectedActivity!.isGoing = true;
+        }
+        this.activityRegistry.set(
+          this.selectedActivity!.id,
+          this.selectedActivity!
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      runInAction(() => (this.isLoading = false));
     }
   };
 }

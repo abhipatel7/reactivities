@@ -1,15 +1,28 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Item, Button, Segment, Icon } from "semantic-ui-react";
+import { Item, Button, Segment, Icon, Label } from "semantic-ui-react";
 import { Activity } from "types";
 import { format } from "date-fns";
+import ActivityListItemAttendee from "../Attendee";
 
 interface Props {
   activity: Activity;
 }
 
 const ActivityListItem: FC<Props> = ({
-  activity: { category, city, date, description, id, title, venue },
+  activity: {
+    category,
+    city,
+    date,
+    description,
+    id,
+    title,
+    venue,
+    attendees,
+    host,
+    isGoing,
+    isHost,
+  },
 }) => {
   return (
     <Segment.Group>
@@ -21,7 +34,21 @@ const ActivityListItem: FC<Props> = ({
               <Item.Header as={Link} to={`/activities/${id}`}>
                 {title}
               </Item.Header>
-              <Item.Description>Hosted by Abhi</Item.Description>
+              <Item.Description>{host?.displayName}</Item.Description>
+              {isHost && (
+                <Item.Description>
+                  <Label basic color="orange">
+                    You are hosting this activity
+                  </Label>
+                </Item.Description>
+              )}
+              {isGoing && !isHost && (
+                <Item.Description>
+                  <Label basic color="green">
+                    You are going to this activity
+                  </Label>
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -32,7 +59,9 @@ const ActivityListItem: FC<Props> = ({
           <Icon name="marker" /> {venue}
         </span>
       </Segment>
-      <Segment secondary>Attendees go here</Segment>
+      <Segment secondary>
+        <ActivityListItemAttendee attendees={attendees!} />
+      </Segment>
       <Segment clearing>
         <span>{description}</span>
         <Button

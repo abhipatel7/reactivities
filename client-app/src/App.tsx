@@ -3,7 +3,6 @@ import { Container } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import {
   Loader,
-  LoginForm,
   NavBar,
   NotFound,
   ServerError,
@@ -50,7 +49,6 @@ const App: FC = () => {
                 />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
-                <Route path="/login" component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
