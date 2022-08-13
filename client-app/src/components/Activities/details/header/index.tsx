@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Button, Header, Item, Segment, Image } from "semantic-ui-react";
+import { Button, Header, Item, Segment, Image, Label } from "semantic-ui-react";
 import { Activity } from "types";
 import { format } from "date-fns";
 import { useStore } from "stores";
@@ -24,15 +24,23 @@ interface Props {
 }
 
 const ActivityDetailsHeader: FC<Props> = ({
-  activity: { category, date, title, id, isHost, isGoing, host },
+  activity: { category, date, title, id, isHost, isGoing, host, isCancelled },
 }) => {
   const {
-    activityStore: { updateAttendance, isLoading },
+    activityStore: { updateAttendance, isLoading, cancelActivityToggle },
   } = useStore();
 
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
+        {isCancelled && (
+          <Label
+            style={{ position: "absolute", zIndex: 1000, left: -14, top: 20 }}
+            ribbon
+            color="red"
+            content="Cancelled"
+          />
+        )}
         <Image
           src={`/assets/categoryImages/${category}.jpg`}
           fluid
@@ -63,15 +71,36 @@ const ActivityDetailsHeader: FC<Props> = ({
       </Segment>
       <Segment clearing attached="bottom">
         {isHost ? (
-          <Button as={Link} to={`/manage/${id}`} color="orange" floated="right">
-            Manage Event
-          </Button>
+          <>
+            <Button
+              color={isCancelled ? "green" : "red"}
+              floated="left"
+              basic
+              content={isCancelled ? "Re-activate Activity" : "Cancel Activity"}
+              onClick={cancelActivityToggle}
+              loading={isLoading}
+            />
+            <Button
+              disabled={isCancelled}
+              as={Link}
+              to={`/manage/${id}`}
+              color="orange"
+              floated="right"
+            >
+              Manage Event
+            </Button>
+          </>
         ) : isGoing ? (
           <Button loading={isLoading} onClick={updateAttendance}>
             Cancel attendance
           </Button>
         ) : (
-          <Button loading={isLoading} onClick={updateAttendance} color="teal">
+          <Button
+            disabled={isCancelled}
+            loading={isLoading}
+            onClick={updateAttendance}
+            color="teal"
+          >
             Join Activity
           </Button>
         )}

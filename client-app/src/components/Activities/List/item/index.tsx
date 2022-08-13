@@ -22,11 +22,20 @@ const ActivityListItem: FC<Props> = ({
     host,
     isGoing,
     isHost,
+    isCancelled,
   },
 }) => {
   return (
     <Segment.Group>
       <Segment>
+        {isCancelled && (
+          <Label
+            attached="top"
+            color="red"
+            content="Cancelled"
+            style={{ textAlign: "center" }}
+          />
+        )}
         <Item.Group>
           <Item>
             <Item.Image size="tiny" circular src="/assets/user.png" />

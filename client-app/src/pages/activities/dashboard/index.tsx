@@ -10,7 +10,7 @@ const ActivityDashboard: FC = () => {
   } = useStore();
 
   useEffect(() => {
-    if (activityRegistry.size === 0) loadActivities();
+    if (activityRegistry.size <= 1) loadActivities();
   }, [activityRegistry, loadActivities]);
 
   if (loadingInitial) {

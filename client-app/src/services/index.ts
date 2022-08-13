@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { history } from "common";
 import { toast } from "react-toastify";
 import { store } from "stores";
-import { Activity, User, UserFormValues } from "types";
+import { Activity, ActivityFormValues, User, UserFormValues } from "types";
 
 const sleep = (delay: number) =>
   new Promise((resolve) => setTimeout(resolve, delay));
@@ -69,8 +69,9 @@ const requests = {
 const Activities = {
   list: () => requests.get<Activity[]>("/activities"),
   details: (id: string) => requests.get<Activity>(`/activities/${id}`),
-  create: (activity: Activity) => requests.post<void>("/activities", activity),
-  update: (activity: Activity) =>
+  create: (activity: ActivityFormValues) =>
+    requests.post<void>("/activities", activity),
+  update: (activity: ActivityFormValues) =>
     requests.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.delete<void>(`/activities/${id}`),
   attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),

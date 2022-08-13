@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { Button, Header, Loader, Segment } from "semantic-ui-react";
 import { useStore } from "stores";
-import { Activity } from "types";
+import { ActivityFormValues } from "types";
 import { v4 } from "uuid";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -16,7 +16,6 @@ const ActivityForm: FC = () => {
     activityStore: {
       createActivity,
       updateActivity,
-      isLoading,
       loadActivityById,
       loadingInitial,
     },
@@ -26,15 +25,9 @@ const ActivityForm: FC = () => {
 
   const history = useHistory();
 
-  const [activity, setActivity] = useState<Activity>({
-    category: "",
-    city: "",
-    date: null,
-    description: "",
-    id: "",
-    title: "",
-    venue: "",
-  });
+  const [activity, setActivity] = useState<ActivityFormValues>(
+    new ActivityFormValues()
+  );
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
@@ -48,12 +41,12 @@ const ActivityForm: FC = () => {
   useEffect(() => {
     if (id)
       loadActivityById(id).then((activity) => {
-        setActivity(activity!);
+        setActivity(new ActivityFormValues(activity));
       });
   }, [id, loadActivityById]);
 
-  const onSubmit = (activity: Activity) => {
-    if (activity.id.length === 0) {
+  const onSubmit = (activity: ActivityFormValues) => {
+    if (!activity.id) {
       let newActivity = { ...activity, id: v4() };
       createActivity(newActivity).then(() =>
         history.push(`/activities/${newActivity.id}`)
@@ -97,7 +90,7 @@ const ActivityForm: FC = () => {
             <TextInput placeholder="Venue" name="venue" />
             <Button
               floated="right"
-              loading={isLoading}
+              loading={isSubmitting}
               positive
               type="submit"
               disabled={isSubmitting || !dirty || !isValid}
