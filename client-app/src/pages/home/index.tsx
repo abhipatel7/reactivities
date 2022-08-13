@@ -1,4 +1,4 @@
-import { LoginForm } from "components";
+import { LoginForm, RegisterForm } from "components";
 import { observer } from "mobx-react-lite";
 import { FC } from "react";
 import { Link } from "react-router-dom";
@@ -40,7 +40,7 @@ const Home: FC = () => {
               Login!
             </Button>
             <Button
-              onClick={() => openModal(<h1>Register</h1>)}
+              onClick={() => openModal(<RegisterForm />)}
               size="huge"
               inverted
             >

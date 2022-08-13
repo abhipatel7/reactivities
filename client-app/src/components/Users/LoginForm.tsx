@@ -6,15 +6,17 @@ import { Button, Header, Label } from "semantic-ui-react";
 import { useStore } from "stores";
 
 const LoginForm: FC = () => {
-  const { userStore } = useStore();
+  const {
+    userStore: { login },
+  } = useStore();
 
   return (
     <Formik
       initialValues={{ email: "", password: "", error: null }}
       onSubmit={(values, { setErrors }) =>
-        userStore
-          .login(values)
-          .catch(() => setErrors({ error: "Invalid email or password" }))
+        login(values).catch(() =>
+          setErrors({ error: "Invalid email or password" })
+        )
       }
     >
       {({ handleSubmit, isSubmitting, errors }) => (
