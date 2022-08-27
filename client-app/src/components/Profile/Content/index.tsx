@@ -1,5 +1,8 @@
+import { observer } from "mobx-react-lite";
 import React, { FC } from "react";
 import { SemanticShorthandItem, Tab, TabPaneProps } from "semantic-ui-react";
+import { Profile } from "types";
+import { ProfilePhotos } from "..";
 
 interface Pane {
   pane?: SemanticShorthandItem<TabPaneProps>;
@@ -7,10 +10,14 @@ interface Pane {
   render?: (() => React.ReactNode) | undefined;
 }
 
-const ProfileContent: FC = () => {
+interface Props {
+  profile: Profile;
+}
+
+const ProfileContent: FC<Props> = ({ profile }) => {
   const panes: Pane[] = [
     { menuItem: "About", render: () => <Tab.Pane>About Content</Tab.Pane> },
-    { menuItem: "Photos", render: () => <Tab.Pane>Photos Content</Tab.Pane> },
+    { menuItem: "Photos", render: () => <ProfilePhotos profile={profile} /> },
     { menuItem: "Events", render: () => <Tab.Pane>Events Content</Tab.Pane> },
     {
       menuItem: "Followers",
@@ -34,4 +41,4 @@ const ProfileContent: FC = () => {
   );
 };
 
-export default ProfileContent;
+export default observer(ProfileContent);

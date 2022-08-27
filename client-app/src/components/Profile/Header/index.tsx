@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import { FC } from "react";
 import {
   Button,
@@ -9,17 +10,28 @@ import {
   Segment,
   Statistic,
 } from "semantic-ui-react";
+import { Profile } from "types";
 
-const ProfileHeader: FC = () => {
+interface Props {
+  profile: Profile;
+}
+
+const ProfileHeader: FC<Props> = ({
+  profile: { displayName, username, bio, image, photos },
+}) => {
   return (
     <Segment>
       <Grid>
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
-              <Item.Image avatar size="small" src={"/assets/user.png"} />
+              <Item.Image
+                avatar
+                size="small"
+                src={image ?? "/assets/user.png"}
+              />
               <Item.Content verticalAlign="middle">
-                <Header as="h1" content="Displayname" />
+                <Header as="h1" content={displayName} />
               </Item.Content>
             </Item>
           </Item.Group>
@@ -49,4 +61,4 @@ const ProfileHeader: FC = () => {
   );
 };
 
-export default ProfileHeader;
+export default observer(ProfileHeader);
