@@ -23,6 +23,7 @@ const ActivityListItem: FC<Props> = ({
     isGoing,
     isHost,
     isCancelled,
+    hostUsername,
   },
 }) => {
   return (
@@ -42,13 +43,18 @@ const ActivityListItem: FC<Props> = ({
               style={{ marginBottom: 5 }}
               size="tiny"
               circular
-              src="/assets/user.png"
+              src={host?.image ?? "/assets/user.png"}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/activities/${id}`}>
                 {title}
               </Item.Header>
-              <Item.Description>{host?.displayName}</Item.Description>
+              <Item.Description>
+                Hosted by{" "}
+                <Link to={`/profiles/${hostUsername}`}>
+                  {host?.displayName}
+                </Link>
+              </Item.Description>
               {isHost && (
                 <Item.Description>
                   <Label basic color="orange">

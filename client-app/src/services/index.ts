@@ -2,7 +2,13 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { history } from "common";
 import { toast } from "react-toastify";
 import { store } from "stores";
-import { Activity, ActivityFormValues, User, UserFormValues } from "types";
+import {
+  Activity,
+  ActivityFormValues,
+  Profile,
+  User,
+  UserFormValues,
+} from "types";
 
 const sleep = (delay: number) =>
   new Promise((resolve) => setTimeout(resolve, delay));
@@ -84,9 +90,14 @@ const Account = {
     requests.post<User>("/account/register", user),
 };
 
+const Profiles = {
+  get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+};
+
 const services = {
   Activities,
   Account,
+  Profiles,
 };
 
 export default services;

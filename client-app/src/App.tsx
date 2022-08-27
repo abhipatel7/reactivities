@@ -9,7 +9,13 @@ import {
   TestErrors,
   ModalContainer,
 } from "components";
-import { Home, ActivityDashboard, ActivityDetails, ActivityForm } from "pages";
+import {
+  Home,
+  ActivityDashboard,
+  ActivityDetails,
+  ActivityForm,
+  Profile,
+} from "pages";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useStore } from "stores";
@@ -47,6 +53,7 @@ const App: FC = () => {
                   key={key}
                   component={ActivityForm}
                 />
+                <Route path="/profiles/:username" component={Profile} />
                 <Route path="/errors" component={TestErrors} />
                 <Route path="/server-error" component={ServerError} />
                 <Route component={NotFound} />
