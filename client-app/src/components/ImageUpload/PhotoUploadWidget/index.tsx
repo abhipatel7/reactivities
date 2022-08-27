@@ -1,9 +1,24 @@
-import { FC, useState } from "react";
-import { Grid, Header, Image } from "semantic-ui-react";
+import { FC, useEffect, useState } from "react";
+import Cropper from "react-cropper";
+import { Button, Grid, Header, Image } from "semantic-ui-react";
+import PhotoWidgetCropper from "../PhotoWidgetCropper";
 import PhotoWidgetDropzone from "../PhotoWidgetDropzone";
 
 const PhotoUploadWidget: FC = () => {
   const [files, setFiles] = useState<any[]>([]);
+  const [cropper, setCropper] = useState<Cropper>();
+
+  const onCrop = () => {
+    if (cropper) {
+      cropper.getCroppedCanvas().toBlob((blob) => console.log(blob));
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
+    };
+  }, [files]);
 
   return (
     <Grid>
@@ -14,11 +29,28 @@ const PhotoUploadWidget: FC = () => {
       <Grid.Column width={1} />
       <Grid.Column width={4}>
         <Header sub color="teal" content="Step 2 - Resize Image" />
-        {files && files.length && <Image src={files[0].preview} />}
+        {files && files.length ? (
+          <PhotoWidgetCropper
+            setCropper={setCropper}
+            imagePreview={files[0].preview}
+          />
+        ) : null}
       </Grid.Column>
       <Grid.Column width={1} />
       <Grid.Column width={4}>
         <Header sub color="teal" content="Step 3 - Preview & Upload" />
+        {files && files.length ? (
+          <>
+            <div
+              className="img-preview"
+              style={{ minHeight: 200, overflow: "hidden" }}
+            />
+            <Button.Group widths={2}>
+              <Button onClick={onCrop} positive icon="check" />
+              <Button onClick={() => setFiles([])} icon="close" />
+            </Button.Group>
+          </>
+        ) : null}
       </Grid.Column>
     </Grid>
   );
