@@ -63,8 +63,26 @@ class ProfileStore {
       runInAction(() => {
         if (this.profile && this.profile.photos) {
           this.profile.photos.find(({ isMain }) => isMain)!.isMain = false;
-          this.profile.photos.find(({ id }) => id === photo.id)!.isMain = false;
+          this.profile.photos.find(({ id }) => id === photo.id)!.isMain = true;
           this.profile.image = photo.url;
+          this.loading = false;
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  deletePhoto = async (photo: Photo) => {
+    this.loading = true;
+    try {
+      await services.Profiles.deletePhoto(photo.id);
+      runInAction(() => {
+        if (this.profile) {
+          this.profile.photos = this.profile.photos?.filter(
+            ({ id }) => id !== photo.id
+          );
           this.loading = false;
         }
       });

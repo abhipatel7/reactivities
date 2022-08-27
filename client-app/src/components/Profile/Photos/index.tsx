@@ -17,6 +17,7 @@ const ProfilePhotos: FC<Props> = ({ profile: { photos } }) => {
       uploading,
       loading,
       setMainPhoto,
+      deletePhoto,
     },
   } = useStore();
 
@@ -33,6 +34,14 @@ const ProfilePhotos: FC<Props> = ({ profile: { photos } }) => {
   ) => {
     setTarget(e.currentTarget.name);
     setMainPhoto(photo);
+  };
+
+  const handleDeletePhoto = (
+    photo: Photo,
+    e: SyntheticEvent<HTMLButtonElement>
+  ) => {
+    setTarget(e.currentTarget.name);
+    deletePhoto(photo);
   };
 
   return (
@@ -66,12 +75,20 @@ const ProfilePhotos: FC<Props> = ({ profile: { photos } }) => {
                         basic
                         color="green"
                         content="Main"
-                        name={photo.id}
+                        name={"main" + photo.id}
                         disabled={photo.isMain}
-                        loading={target === photo.id && loading}
+                        loading={target === "main" + photo.id && loading}
                         onClick={(e) => handleSetMainPhoto(photo, e)}
                       />
-                      <Button basic color="red" icon="trash" />
+                      <Button
+                        basic
+                        color="red"
+                        icon="trash"
+                        name={"delete" + photo.id}
+                        loading={target === "delete" + photo.id && loading}
+                        onClick={(e) => handleDeletePhoto(photo, e)}
+                        disabled={photo.isMain}
+                      />
                     </Button.Group>
                   )}
                 </Card>
