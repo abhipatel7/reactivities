@@ -5,6 +5,7 @@ import { store } from "stores";
 import {
   Activity,
   ActivityFormValues,
+  Photo,
   Profile,
   User,
   UserFormValues,
@@ -92,6 +93,13 @@ const Account = {
 
 const Profiles = {
   get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+  uploadPhoto: (file: Blob) => {
+    let formData = new FormData();
+    formData.append("File", file);
+    return axios.post<Photo>("photos", formData, {
+      headers: { "Content-type": "multipart/form-data" },
+    });
+  },
 };
 
 const services = {

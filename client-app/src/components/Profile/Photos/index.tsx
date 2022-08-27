@@ -11,10 +11,14 @@ interface Props {
 
 const ProfilePhotos: FC<Props> = ({ profile: { photos } }) => {
   const {
-    profileStore: { isCurrentUser },
+    profileStore: { isCurrentUser, uploadPhoto, uploading },
   } = useStore();
 
   const [addPhoto, setAddPhoto] = useState(false);
+
+  const handlerPhotoUpload = (file: Blob) => {
+    uploadPhoto(file).then(() => setAddPhoto(false));
+  };
 
   return (
     <Tab.Pane>
@@ -32,7 +36,10 @@ const ProfilePhotos: FC<Props> = ({ profile: { photos } }) => {
         </Grid.Column>
         <Grid.Column width={16}>
           {addPhoto ? (
-            <PhotoUploadWidget />
+            <PhotoUploadWidget
+              uploadPhoto={handlerPhotoUpload}
+              loading={uploading}
+            />
           ) : (
             <Card.Group itemsPerRow={5}>
               {photos?.map(({ id, url }) => (
